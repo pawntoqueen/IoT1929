@@ -1,0 +1,30 @@
+int ledPinleri[] = {
+ 2,3,4
+};   
+int timers[] = {
+ 10000,2000,5000
+};
+
+
+int ledSayisi = 3; 
+
+
+void setup()
+{
+ for (int i = 0; i < ledSayisi; i++) {
+    pinMode(ledPinleri[i], OUTPUT);
+  }
+}
+
+void loop()
+{
+  for (int i = 0; i < ledSayisi; i++) {
+    isikYak(ledPinleri[i], timers[i]);
+  }
+}
+
+void isikYak(int pinNo, int delayTime){
+  digitalWrite(pinNo, HIGH);
+    delay(delayTime); 
+    digitalWrite(pinNo, LOW);
+}

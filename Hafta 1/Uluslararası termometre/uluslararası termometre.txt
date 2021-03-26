@@ -1,0 +1,76 @@
+#include <TM1637Display.h>
+#include <dht.h>
+#define CLK 2
+#define DIO 3
+#define DHT11_PIN 7
+
+dht DHT;
+
+TM1637Display display = TM1637Display(CLK, DIO);
+
+// Create degree Celsius symbol:
+const uint8_t celsius[] = {
+  SEG_A | SEG_B | SEG_F | SEG_G,  // Circle
+  SEG_A | SEG_D | SEG_E | SEG_F   // C
+};
+
+// Create degree Fahrenheit symbol:
+const uint8_t fahrenheit[] = {
+  SEG_A | SEG_B | SEG_F | SEG_G,  // Circle
+  SEG_A | SEG_E | SEG_F | SEG_G   // F
+};
+
+// Create degree Kelvin symbol:
+const uint8_t kelvin[] = {
+  SEG_F| SEG_E | SEG_G   // K benzeri
+};
+
+// Create humidity n symbol:
+const uint8_t nemm[] = {
+  SEG_E | SEG_C | SEG_G   // n benzeri
+};
+void setup() {
+Serial.begin(9600);
+ display.clear();
+  delay(1000);
+}
+
+void loop() {
+display.setBrightness(1);
+int okunanDeger = DHT.read11(DHT11_PIN);
+
+int c = DHT.temperature;
+int k = c+ 273;
+int f = 1.8*c + 32;
+
+
+Serial.print("CELCIUS: ");
+Serial.println(c);
+display.showNumberDec(c, false, 2, 0);
+display.setSegments(celsius, 2, 2);
+delay(2000);
+display.clear();
+
+Serial.print("FAHRENHEIT: ");
+Serial.println(f);
+display.showNumberDec(f, false, 2, 0);
+display.setSegments(fahrenheit, 2, 2);
+delay(2000);
+display.clear();
+
+Serial.print("KELVIN: ");
+Serial.println(k);
+display.showNumberDec(k, false, 3, 1);
+display.setSegments(kelvin, 1, 4);
+delay(2000);
+display.clear();
+
+Serial.print("HUMIDITY: ");
+int nem = DHT.humidity;
+Serial.println(nem);
+display.setSegments(nemm, 1, 1);
+display.showNumberDec(nem);
+delay(2000);
+display.clear();
+ }
+
